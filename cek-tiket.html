@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Cek Tiket Pendakian Gunung Munara">
+    <title>Cek Tiket Pendakian Gunung Munara</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <a href="index.html">
+                <img src="logo.jpg" alt="Logo Gunung Munara">
+            </a>
+        </div>
+
+        <nav>
+            <ul>
+                <li><a href="pintu-pendakian.html" id="nav-pintu">Pintu Pendakian</a></li>
+                <li><a href="info-kecelakaan.html" id="nav-kecelakaan">Info Kecelakaan</a></li>
+                <li><a href="daftar-hitam.html" id="nav-hitam">Daftar Hitam</a></li>
+                <li><a href="unduh.html" id="nav-unduh">Unduh</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section id="cek-tiket">
+        <h2>Cek Tiket Pendakian</h2>
+        
+        <div id="ticket-info">
+            <p><strong>Nama Pendaki:</strong> <span id="ticket-nama"></span></p>
+            <p><strong>Tanggal Pendakian:</strong> <span id="ticket-tanggal"></span></p>
+            <p><strong>Jumlah Pendaki:</strong> <span id="ticket-jumlah"></span></p>
+            <p><strong>Email:</strong> <span id="ticket-email"></span></p>
+            <p><strong>Kode Booking:</strong> <span id="ticket-kode"></span></p>
+        </div>
+
+        <div id="no-ticket-message">
+            <p>No ticket found. Please complete your registration first.</p>
+        </div>
+
+        <button id="download-btn" class="btn" style="display: none;">Unduh Tiket</button>
+
+        <button class="btn" onclick="window.location.href='pendaftaran-pendakian.html'">Kembali ke Pendaftaran</button>
+    </section>
+
+    <footer>
+        <div class="contact">
+            <h3>Kontak</h3>
+            <p>Alamat: Kampung Sawah, Rumpin, Bogor Regency, West Java</p>
+            <p>Call Center: <a href="tel:081213141651">081213141651</a> (WhatsApp)</p>
+            <div class="social-media">
+                <a href="#" class="social-icon" title="Facebook Gunung Munara">
+                    <img src="fblogo.png" alt="Facebook Gunung Munara" class="social-logo">
+                </a>
+                <a href="#" class="social-icon" title="Instagram Gunung Munara">
+                    <img src="iglogo.webp" alt="Instagram Gunung Munara" class="social-logo">
+                </a>
+                <a href="#" class="social-icon" title="YouTube Gunung Munara">
+                    <img src="ytlogo.png" alt="YouTube Gunung Munara" class="social-logo">
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        window.onload = function() {
+            const nama = localStorage.getItem("nama");
+            const tanggal = localStorage.getItem("tanggal");
+            const jumlah = localStorage.getItem("jumlah");
+            const email = localStorage.getItem("email");
+            const kodeBooking = localStorage.getItem("kodeBooking");
+
+            if (nama && tanggal && jumlah && email && kodeBooking) {
+                document.getElementById("ticket-nama").textContent = nama;
+                document.getElementById("ticket-tanggal").textContent = tanggal;
+                document.getElementById("ticket-jumlah").textContent = jumlah;
+                document.getElementById("ticket-email").textContent = email;
+                document.getElementById("ticket-kode").textContent = kodeBooking;
+
+                document.getElementById("no-ticket-message").style.display = "none";
+
+                document.getElementById("download-btn").style.display = "inline-block";
+            } else {
+
+                document.getElementById("ticket-info").style.display = "none";
+            }
+        };
+
+        document.getElementById("download-btn").onclick = function() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            doc.setFontSize(16);
+            doc.text("Tiket Pendakian Gunung Munara", 20, 20);
+            doc.setFontSize(12);
+            doc.text(`Nama Pendaki: ${localStorage.getItem("nama")}`, 20, 40);
+            doc.text(`Tanggal Pendakian: ${localStorage.getItem("tanggal")}`, 20, 50);
+            doc.text(`Jumlah Pendaki: ${localStorage.getItem("jumlah")}`, 20, 60);
+            doc.text(`Email: ${localStorage.getItem("email")}`, 20, 70);
+            doc.text(`Kode Booking: ${localStorage.getItem("kodeBooking")}`, 20, 80);
+
+            doc.save("tiket_pendakian.pdf");
+        };
+    </script>
+</body>
+</html>
