@@ -85,6 +85,7 @@ nav ul li a:focus {
 }
 
 .header-text h1 {
+    color: #ffffff;
     font-size: 3rem;
     font-weight: 700;
     margin-bottom: 20px;
