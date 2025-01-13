@@ -114,6 +114,11 @@
         <button id="download-btn" class="btn" style="display: none;">Unduh Tiket</button>
     </section>
 
+    <footer>
+        <p>Alamat: Kampung Sawah, Rumpin, Bogor Regency, West Java</p>
+        <p>Call Center: <a href="tel:081213141651">081213141651</a> (WhatsApp)</p>
+    </footer>
+
     <script>
         window.onload = function() {
             const nama = localStorage.getItem("nama");
@@ -149,7 +154,7 @@
                 templateFile = 'template1.pdf';
             } else if (nama === 'Simon') {
                 templateFile = 'template2.pdf';
-
+            }
             return templateFile;
         }
     </script>
