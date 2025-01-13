@@ -103,39 +103,16 @@
 
     <section id="cek-tiket">
         <h2>Cek Tiket Pendakian</h2>
-        
-        <div id="ticket-info" class="ticket">
-            <div class="ticket-header">
-                <h1>Gunung Munara</h1>
-                <h2>Tiket Pendakian</h2>
-            </div>
-            <div class="ticket-body">
-                <div class="ticket-section">
-                    <p><strong>Nama Pendaki:</strong> <span id="ticket-nama"></span></p>
-                    <p><strong>Tanggal:</strong> <span id="ticket-tanggal"></span></p>
-                </div>
-                <div class="ticket-section">
-                    <p><strong>Jumlah Pendaki:</strong> <span id="ticket-jumlah"></span></p>
-                    <p><strong>Kode Booking:</strong> <span id="ticket-kode"></span></p>
-                </div>
-            </div>
-            <div class="ticket-footer">
-                <p>Selamat mendaki! Nikmati keindahan Gunung Munara.</p>
-            </div>
-        </div>
-        
-        <div id="no-ticket-message" style="display: none;">
-            <p>No ticket found. Please complete your registration first.</p>
+        <div id="ticket-info">
+            <h3>Informasi Tiket</h3>
+            <p><strong>Nama Pendaki:</strong> <span id="ticket-nama"></span></p>
+            <p><strong>Tanggal Pendakian:</strong> <span id="ticket-tanggal"></span></p>
+            <p><strong>Jumlah Pendaki:</strong> <span id="ticket-jumlah"></span></p>
+            <p><strong>Kode Booking:</strong> <span id="ticket-kode"></span></p>
         </div>
 
         <button id="download-btn" class="btn" style="display: none;">Unduh Tiket</button>
-        <button class="btn" onclick="window.location.href='pendaftaran-pendakian.html'">Kembali ke Pendaftaran</button>
     </section>
-
-    <footer>
-        <p>Alamat: Kampung Sawah, Rumpin, Bogor Regency, West Java</p>
-        <p>Call Center: <a href="tel:081213141651">081213141651</a> (WhatsApp)</p>
-    </footer>
 
     <script>
         window.onload = function() {
@@ -150,30 +127,31 @@
                 document.getElementById("ticket-jumlah").textContent = jumlah;
                 document.getElementById("ticket-kode").textContent = kodeBooking;
 
-                document.getElementById("no-ticket-message").style.display = "none";
                 document.getElementById("download-btn").style.display = "inline-block";
             } else {
-                document.getElementById("ticket-info").style.display = "none";
+                document.getElementById("ticket-info").innerHTML = "<p>Tiket tidak ditemukan. Silakan selesaikan pendaftaran terlebih dahulu.</p>";
             }
         };
 
         document.getElementById("download-btn").onclick = function() {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-
             const nama = localStorage.getItem("nama");
-            const tanggal = localStorage.getItem("tanggal");
-            const jumlah = localStorage.getItem("jumlah");
-            const kodeBooking = localStorage.getItem("kodeBooking");
+            const template = chooseTemplate(nama); 
 
-            doc.text("Gunung Munara - Tiket Pendakian", 20, 20);
-            doc.text(`Nama Pendaki: ${nama}`, 20, 40);
-            doc.text(`Tanggal: ${tanggal}`, 20, 60);
-            doc.text(`Jumlah Pendaki: ${jumlah}`, 20, 80);
-            doc.text(`Kode Booking: ${kodeBooking}`, 20, 100);
+            const templateURL = `${template}`;  
 
-            doc.save("tiket_pendakian.pdf");
+            window.location.href = templateURL;
         };
+
+        function chooseTemplate(nama) {
+            let templateFile = 'template1.pdf';
+
+            if (nama === 'Nicholas') {
+                templateFile = 'template1.pdf';
+            } else if (nama === 'Simon') {
+                templateFile = 'template2.pdf';
+
+            return templateFile;
+        }
     </script>
 </body>
 </html>
