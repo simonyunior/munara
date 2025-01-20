@@ -35,53 +35,70 @@
             <input type="date" id="tanggal" name="tanggal" required>
         
             <label for="jumlah">Jumlah Pendaki:</label>
-            <input type="number" id="jumlah" name="jumlah" min="1" required>
+            <input type="number" id="jumlah" name="jumlah" min="1" onchange="generateAnggotaFields()" required>
         
             <label for="email">Email:</label>
             <input type="email" id="email" name="email" required>
         
+            <div id="anggota-fields"></div> <!-- Placeholder untuk input anggota -->
+        
             <button type="submit" class="btn">Lanjut ke Pembayaran</button>
-        </form>        
+        </form>
     </section>
-
-    <footer>
-        <div class="contact">
-            <h3>Kontak</h3>
-            <p>Alamat: Kampung Sawah, Rumpin, Bogor Regency, West Java</p>
-            <p>Call Center: <a href="tel:081213141651">081213141651</a> (WhatsApp)</p>
-            <div class="social-media">
-                <a href="#" class="social-icon" title="Facebook Gunung Munara">
-                    <img src="fblogo.png" alt="Facebook Gunung Munara" class="social-logo">
-                </a>
-                <a href="#" class="social-icon" title="Instagram Gunung Munara">
-                    <img src="iglogo.webp" alt="Instagram Gunung Munara" class="social-logo">
-                </a>
-                <a href="#" class="social-icon" title="YouTube Gunung Munara">
-                    <img src="ytlogo.png" alt="YouTube Gunung Munara" class="social-logo">
-                </a>
-            </div>
-        </div>
-    </footer>
-
+    
     <script>
+        function generateAnggotaFields() {
+            const jumlah = document.getElementById("jumlah").value;
+            const anggotaFields = document.getElementById("anggota-fields");
+            anggotaFields.innerHTML = ""; 
+    
+            if (jumlah > 1) {
+                for (let i = 1; i < jumlah; i++) {
+                    const label = document.createElement("label");
+                    label.textContent = `Nama Anggota ${i}:`;
+                    const input = document.createElement("input");
+                    input.type = "text";
+                    input.name = `anggota-${i}`;
+                    input.required = true;
+                    anggotaFields.appendChild(label);
+                    anggotaFields.appendChild(input);
+                    anggotaFields.appendChild(document.createElement("br"));
+                }
+            }
+        }
+    
         function submitPendaftaranTim(event) {
             event.preventDefault();
-    
+        
             const nama = document.getElementById("nama").value;
             const tanggal = document.getElementById("tanggal").value;
             const jumlah = document.getElementById("jumlah").value;
             const email = document.getElementById("email").value;
-    
+        
+            const anggota = [];
+            for (let i = 1; i < jumlah; i++) {
+                const anggotaInput = document.querySelector(`[name="anggota-${i}"]`);
+                if (anggotaInput) {
+                    anggota.push(anggotaInput.value);
+                }
+            }
+        
             const kodeBooking = "GM" + Date.now();
-    
+        
             localStorage.setItem("nama", nama);
             localStorage.setItem("tanggal", tanggal);
             localStorage.setItem("jumlah", jumlah);
             localStorage.setItem("email", email);
+            localStorage.setItem("anggota", JSON.stringify(anggota));
             localStorage.setItem("kodeBooking", kodeBooking);
-    
+            localStorage.setItem("statusPembayaran", "Belum Dibayar"); 
+        
+            alert("Pendaftaran berhasil disimpan! Kode Booking Anda: " + kodeBooking);
+        
             window.location.href = "cek-tiket.html";
         }
-    </script>    
+        
+    </script>
+    
 </body>
 </html>

@@ -24,20 +24,75 @@
             </ul>
         </nav>
     </header>
-
-    <section>
+    
+    <section id="report-section">
         <h2>Info Kecelakaan Gunung Munara</h2>
-        <p>Saat ini, tidak ada kecelakaan yang dilaporkan di Gunung Munara. Tetap waspada dan selalu berhati-hati selama mendaki.</p>
-        <p>Berikut adalah beberapa tips keselamatan untuk memastikan pengalaman mendaki yang aman:</p>
-        <ul>
-            <li>Selalu ikuti jalur pendakian yang telah ditentukan.</li>
-            <li>Periksa kondisi cuaca sebelum mendaki.</li>
-            <li>Pastikan membawa perlengkapan mendaki yang sesuai.</li>
-            <li>Jangan mendaki sendirian. Pastikan selalu bersama rombongan.</li>
-            <li>Hubungi petugas jika terjadi situasi darurat.</li>
-        </ul>
+        <div id="no-incident-message">
+            <p>Saat ini, tidak ada kecelakaan yang dilaporkan di Gunung Munara. Tetap waspada dan selalu berhati-hati selama mendaki.</p>
+            <p>Berikut adalah beberapa tips keselamatan untuk memastikan pengalaman mendaki yang aman:</p>
+            <ul>
+                <li>Selalu ikuti jalur pendakian yang telah ditentukan.</li>
+                <li>Periksa kondisi cuaca sebelum mendaki.</li>
+                <li>Pastikan membawa perlengkapan mendaki yang sesuai.</li>
+                <li>Jangan mendaki sendirian. Pastikan selalu bersama rombongan.</li>
+                <li>Hubungi petugas jika terjadi situasi darurat.</li>
+            </ul>
+        </div>
+        <div id="incident-reports">
+            <h3>Data Kecelakaan Terbaru</h3>
+        </div>
     </section>
 
+    <section id="admin-form">
+        <h3>Tambah Data Kecelakaan</h3>
+        <form id="add-incident-form">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+            <br>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+            <br>
+            <label for="incident-details">Detail Kecelakaan:</label>
+            <textarea id="incident-details" name="incident-details" required></textarea>
+            <br>
+            <button type="button" onclick="submitIncident()">Tambah Data</button>
+        </form>
+        <div id="message"></div>
+    </section>
+    
+    <script>
+        function submitIncident() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const incidentDetails = document.getElementById('incident-details').value;
+            const message = document.getElementById('message');
+    
+
+            if (username === 'admin' && password === '1234') {
+                const noIncidentMessage = document.getElementById('no-incident-message');
+                if (noIncidentMessage) {
+                    noIncidentMessage.remove();
+                }
+
+                const reportContainer = document.getElementById('incident-reports');
+    
+
+                const newIncident = document.createElement('p');
+                newIncident.textContent = `Kecelakaan dilaporkan: ${incidentDetails}`;
+                reportContainer.appendChild(newIncident);
+    
+
+                document.getElementById('add-incident-form').reset();
+                message.style.color = 'green';
+                message.textContent = 'Data berhasil ditambahkan!';
+            } else {
+
+                message.style.color = 'red';
+                message.textContent = 'Username atau password salah!';
+            }
+        }
+    </script>
+    
     <footer>
         <div class="contact">
             <h3>Kontak</h3>

@@ -120,36 +120,41 @@
     </footer>
 
     <script>
-        window.onload = function() {
+        document.addEventListener("DOMContentLoaded", function() {
             const nama = localStorage.getItem("nama");
             const tanggal = localStorage.getItem("tanggal");
             const jumlah = localStorage.getItem("jumlah");
             const kodeBooking = localStorage.getItem("kodeBooking");
-
+            const statusPembayaran = localStorage.getItem("statusPembayaran");
+    
             if (nama && tanggal && jumlah && kodeBooking) {
                 document.getElementById("ticket-nama").textContent = nama;
                 document.getElementById("ticket-tanggal").textContent = tanggal;
                 document.getElementById("ticket-jumlah").textContent = jumlah;
                 document.getElementById("ticket-kode").textContent = kodeBooking;
-
+    
                 document.getElementById("download-btn").style.display = "inline-block";
-            } else {
-                document.getElementById("ticket-info").innerHTML = "<p>Tiket tidak ditemukan. Silakan selesaikan pendaftaran terlebih dahulu.</p>";
-            }
-        };
 
+                if (statusPembayaran !== "Lunas") {
+                    document.getElementById("ticket-info").innerHTML +=
+                        "<p>Status pembayaran: Belum Dibayar. Silakan selesaikan pembayaran di halaman Status Pembayaran.</p>";
+                }
+            } else {
+                document.getElementById("ticket-info").innerHTML =
+                    "<p>Tiket tidak ditemukan. Silakan selesaikan pendaftaran terlebih dahulu.</p>";
+            }
+        });
+    
         document.getElementById("download-btn").onclick = function() {
             const nama = localStorage.getItem("nama");
-            const template = chooseTemplate(nama); 
-
-            const templateURL = `${template}`;  
-
+            const template = chooseTemplate(nama);
+    
+            const templateURL = `${template}`;
             window.location.href = templateURL;
         };
-
+    
         function chooseTemplate(nama) {
             let templateFile = 'template1.pdf';
-
             if (nama === 'Nicholas') {
                 templateFile = 'tiketpendakian.pdf';
             } else if (nama === 'Simon') {
@@ -158,5 +163,6 @@
             return templateFile;
         }
     </script>
+    
 </body>
 </html>

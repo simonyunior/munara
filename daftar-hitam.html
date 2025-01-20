@@ -28,29 +28,95 @@
     <section id="daftar-hitam">
         <h2>Daftar Hitam</h2>
         <p>Daftar pengguna atau grup yang dibatasi:</p>
-        <ul>
-            <li>Nama: John Doe, Alasan: Pelanggaran aturan pendakian</li>
-        </ul>
+        <ul id="blacklist"></ul>
     </section>
 
-    <footer>
-        <div class="contact">
-            <h3>Kontak</h3>
-            <p>Alamat: Kampung Sawah, Rumpin, Bogor Regency, West Java</p>
-            <p>Call Center: <a href="tel:081213141651">081213141651</a> (WhatsApp)</p>
-            <div class="social-media">
-                <a href="#" class="social-icon" title="Facebook Gunung Munara">
-                    <img src="fblogo.png" alt="Facebook Gunung Munara" class="social-logo">
-                </a>
-                <a href="#" class="social-icon" title="Instagram Gunung Munara">
-                    <img src="iglogo.webp" alt="Instagram Gunung Munara" class="social-logo">
-                </a>
-                <a href="#" class="social-icon" title="YouTube Gunung Munara">
-                    <img src="ytlogo.png" alt="YouTube Gunung Munara" class="social-logo">
-                </a>
-            </div>
-        </div>
-    </footer>
+    <section id="admin-form">
+        <h3>Tambah Pengguna ke Daftar Hitam</h3>
+        <form id="add-blacklist-form">
+            <label for="username">Username Admin:</label>
+            <input type="text" id="username" name="username" required>
+            <br>
+            <label for="password">Password Admin:</label>
+            <input type="password" id="password" name="password" required>
+            <br>
+            <label for="pendaki-list">Pilih Nama Pendaki:</label>
+            <select id="pendaki-list" name="pendaki-list" required>
+                <option value="">Pilih Nama</option>
+            </select>
+            <br>
+            <label for="reason">Alasan:</label>
+            <textarea id="reason" name="reason" required></textarea>
+            <br>
+            <button type="button" onclick="addToBlacklist()">Tambah</button>
+        </form>
+        <div id="message"></div>
+    </section>
+    
+    <script>
+        function loadPendaki() {
+            const pendaki = JSON.parse(localStorage.getItem("pendaki")) || [];
+            const pendakiList = document.getElementById("pendaki-list");
+    
+            pendakiList.innerHTML = '<option value="">Pilih Nama</option>'; // Reset dropdown
+            pendaki.forEach((data, index) => {
+                const option = document.createElement("option");
+                option.value = index;
+                option.textContent = `${data.namaKetua} (${data.kodeBooking})`;
+                pendakiList.appendChild(option);
+            });
+        }
 
+        function loadBlacklist() {
+            const blacklist = JSON.parse(localStorage.getItem("blacklist")) || [];
+            const blacklistElement = document.getElementById("blacklist");
+            blacklistElement.innerHTML = "";
+    
+            blacklist.forEach(entry => {
+                const li = document.createElement("li");
+                li.textContent = `Nama: ${entry.name}, Alasan: ${entry.reason}`;
+                blacklistElement.appendChild(li);
+            });
+        }
+    
+        function addToBlacklist() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const pendakiIndex = document.getElementById('pendaki-list').value;
+            const reason = document.getElementById('reason').value;
+            const message = document.getElementById('message');
+    
+            const pendaki = JSON.parse(localStorage.getItem("pendaki")) || [];
+    
+            if (!pendakiIndex) {
+                message.style.color = 'red';
+                message.textContent = 'Silakan pilih pendaki!';
+                return;
+            }
+    
+            const selectedPendaki = pendaki[pendakiIndex];
+    
+            if (username === 'admin' && password === '1234') {
+                const blacklist = JSON.parse(localStorage.getItem("blacklist")) || [];
+                blacklist.push({ name: selectedPendaki.namaKetua, reason });
+                localStorage.setItem("blacklist", JSON.stringify(blacklist));
+
+                loadBlacklist();
+
+                document.getElementById('add-blacklist-form').reset();
+                message.style.color = 'green';
+                message.textContent = 'Pendaki berhasil ditambahkan ke daftar hitam!';
+            } else {
+
+                message.style.color = 'red';
+                message.textContent = 'Username atau password salah!';
+            }
+        }
+        document.addEventListener("DOMContentLoaded", () => {
+            loadPendaki();
+            loadBlacklist();
+        });
+    </script>
+    
 </body>
 </html>

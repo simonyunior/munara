@@ -14,7 +14,6 @@
                 <img src="logo.jpg" alt="Logo Gunung Munara">
             </a>
         </div>
-
         <nav>
             <ul>
                 <li><a href="pintu-pendakian.html" id="nav-pintu">Pintu Pendakian</a></li>
@@ -42,7 +41,10 @@
             <p><strong>Kode Booking:</strong> <span id="status-kode"></span></p>
             <p><strong>Status Pembayaran:</strong> <span id="status-pembayaran">Belum Dibayar</span></p>
 
-            <button id="btn-pembayaran" class="btn" onclick="ubahStatusPembayaran()">Bayar</button>
+            <!-- Payment button to redirect to the fake payment gateway -->
+            <a href="payment-gateway.html" id="payment-link-button" style="display: none;">
+                <button class="btn">Bayar Sekarang</button>
+            </a>
         </div>
 
         <div id="no-ticket-message" style="display: none;">
@@ -70,49 +72,61 @@
     </footer>
 
     <script>
-localStorage.setItem("statusPembayaran", "Belum Dibayar");
+        window.addEventListener('load', function() {
+            if (!localStorage.getItem("statusPembayaran")) {
+                localStorage.setItem("statusPembayaran", "Belum Dibayar");
+            }
 
-document.getElementById('cek-status-form').addEventListener('submit', function(event) {
-    event.preventDefault();
+            console.log("statusPembayaran", localStorage.getItem("statusPembayaran")); 
 
-    const kodeBookingInput = document.getElementById('kode-booking').value;
+            function checkElements() {
+                const ticketStatus = document.getElementById('ticket-status');
+                const paymentLink = document.getElementById('payment-link-button');
+                const noTicketMessage = document.getElementById('no-ticket-message');
 
-    const nama = localStorage.getItem("nama");
-    const tanggal = localStorage.getItem("tanggal");
-    const jumlah = localStorage.getItem("jumlah");
-    const email = localStorage.getItem("email");
-    const kodeBooking = localStorage.getItem("kodeBooking");
-    const statusPembayaran = localStorage.getItem("statusPembayaran");
+                if (ticketStatus && paymentLink && noTicketMessage) {
+                    document.getElementById('cek-status-form').addEventListener('submit', function(event) {
+                        event.preventDefault();
 
-    if (kodeBookingInput === kodeBooking) {
-        document.getElementById('status-nama').textContent = nama;
-        document.getElementById('status-tanggal').textContent = tanggal;
-        document.getElementById('status-jumlah').textContent = jumlah;
-        document.getElementById('status-email').textContent = email;
-        document.getElementById('status-kode').textContent = kodeBooking;
+                        const kodeBookingInput = document.getElementById('kode-booking').value;
 
-        const status = statusPembayaran || "Belum Dibayar";
-        document.getElementById('status-pembayaran').textContent = status;
+                        const nama = localStorage.getItem("nama");
+                        const tanggal = localStorage.getItem("tanggal");
+                        const jumlah = localStorage.getItem("jumlah");
+                        const email = localStorage.getItem("email");
+                        const kodeBooking = localStorage.getItem("kodeBooking");
+                        const statusPembayaran = localStorage.getItem("statusPembayaran");
 
-        if (status === "Belum Dibayar") {
-            document.getElementById('btn-pembayaran').style.display = "inline-block";
-        } else {
-            document.getElementById('btn-pembayaran').style.display = "none";
-        }
+                        if (kodeBookingInput === kodeBooking) {
+                            document.getElementById('status-nama').textContent = nama;
+                            document.getElementById('status-tanggal').textContent = tanggal;
+                            document.getElementById('status-jumlah').textContent = jumlah;
+                            document.getElementById('status-email').textContent = email;
+                            document.getElementById('status-kode').textContent = kodeBooking;
 
-        document.getElementById('ticket-status').style.display = "block";
-        document.getElementById('no-ticket-message').style.display = "none";
-    } else {
-        document.getElementById('ticket-status').style.display = "none";
-        document.getElementById('no-ticket-message').style.display = "block";
-    }
-});
+                            document.getElementById('status-pembayaran').textContent = statusPembayaran || "Belum Dibayar";
 
-function ubahStatusPembayaran() {
-    localStorage.setItem("statusPembayaran", "Lunas");
-    document.getElementById('status-pembayaran').textContent = "Lunas";
-    document.getElementById('btn-pembayaran').style.display = "none";
-}
+                            ticketStatus.style.display = "block";
+
+                            if (statusPembayaran === "Belum Dibayar") {
+                                paymentLink.style.display = "inline-block";
+                            } else {
+                                paymentLink.style.display = "none";
+                            }
+
+                            noTicketMessage.style.display = "none";
+                        } else {
+                            ticketStatus.style.display = "none";
+                            noTicketMessage.style.display = "block";
+                        }
+                    });
+
+                    clearInterval(elementCheckInterval);
+                }
+            }
+
+            const elementCheckInterval = setInterval(checkElements, 100);
+        });
     </script>
 </body>
 </html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Halaman Payment Gateway - Gunung Munara">
+    <title>Payment Gateway - Gunung Munara</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <a href="index.html">
+                <img src="logo.jpg" alt="Logo Gunung Munara">
+            </a>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="pintu-pendakian.html" id="nav-pintu">Pintu Pendakian</a></li>
+                <li><a href="info-kecelakaan.html" id="nav-kecelakaan">Info Kecelakaan</a></li>
+                <li><a href="daftar-hitam.html" id="nav-hitam">Daftar Hitam</a></li>
+                <li><a href="unduh.html" id="nav-unduh">Unduh</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section id="payment-gateway">
+        <h2>Payment Gateway</h2>
+        <p>Anda akan diarahkan untuk menyelesaikan pembayaran. Silakan tekan tombol "Bayar" di bawah ini untuk melanjutkan.</p>
+
+        <form id="payment-form">
+            <label for="payment-method">Pilih metode pembayaran:</label>
+            <select id="payment-method">
+                <option value="credit-card">Kartu Kredit</option>
+                <option value="bank-transfer">Transfer Bank</option>
+            </select>
+            <button type="submit" class="btn">Bayar</button>
+        </form>
+        
+        <p id="payment-status" style="display: none;">Pembayaran Berhasil!</p>
+
+        <button id="back-to-status" style="display: none;" onclick="window.location.href = 'status-pembayaran.html'">Kembali ke Status Pembayaran</button>
+    </section>
+
+    <footer>
+        <div class="contact">
+            <h3>Kontak</h3>
+            <p>Alamat: Kampung Sawah, Rumpin, Bogor Regency, West Java</p>
+            <p>Call Center: <a href="tel:081213141651">081213141651</a> (WhatsApp)</p>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('payment-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            document.getElementById('payment-status').style.display = "block";
+            document.getElementById('back-to-status').style.display = "inline-block";
+
+            localStorage.setItem("statusPembayaran", "Sudah Dibayar"); 
+        });
+    </script>
+</body>
+</html>
